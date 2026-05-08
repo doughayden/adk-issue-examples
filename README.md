@@ -8,10 +8,10 @@ Each subdirectory is a self-contained example for a specific bug — structured 
 
 | # | Directory | Bug | Issue |
 |---|-----------|-----|-------|
-| 01 | [`01-preemptive_toolset_auth/`](01-preemptive_toolset_auth/) | Preemptive toolset auth triggers OAuth redirect on every agent invocation | TBD |
-| 02 | [`02-scope_in_refresh/`](02-scope_in_refresh/) | OAuth2 token refresh fails for providers that reject `scope` parameter (e.g. Salesforce) | TBD |
-| 03 | [`03-refresh_not_persisted/`](03-refresh_not_persisted/) | `ToolAuthHandler._get_existing_credential` refreshes OAuth2 credentials in memory but doesn't persist them | TBD |
-| 04 | [`04-tool_level_auth_continuation/`](04-tool_level_auth_continuation/) | Tool-level auth continues invocation past the `adk_request_credential` event, unlike toolset-level auth which terminates cleanly | TBD |
+| 01 | [`01-preemptive_toolset_auth/`](01-preemptive_toolset_auth/) | Preemptive toolset auth triggers OAuth redirect on every agent invocation | [#5327](https://github.com/google/adk-python/issues/5327) |
+| 02 | [`02-scope_in_refresh/`](02-scope_in_refresh/) | OAuth2 token refresh fails for providers that reject `scope` parameter (e.g. Salesforce) | [#5328](https://github.com/google/adk-python/issues/5328) |
+| 03 | [`03-refresh_not_persisted/`](03-refresh_not_persisted/) | `ToolAuthHandler._get_existing_credential` refreshes OAuth2 credentials in memory but doesn't persist them | [#5329](https://github.com/google/adk-python/issues/5329) |
+| 04 | [`04-tool_level_auth_continuation/`](04-tool_level_auth_continuation/) | Tool-level auth continues invocation past the `adk_request_credential` event, unlike toolset-level auth which terminates cleanly | [#5637](https://github.com/google/adk-python/issues/5637) |
 
 ## Running an example
 
