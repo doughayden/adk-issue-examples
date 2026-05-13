@@ -24,8 +24,8 @@ Differences from ``01-preemptive_toolset_auth/main.py``:
 
 Run from this directory:
 
-    uv run python main.py                 # demonstrate the bug
-    uv run python main.py --apply-fix     # demonstrate the fix resolves it
+    uv run main.py                 # demonstrate the bug
+    uv run main.py --apply-fix     # demonstrate the fix resolves it
 
 Requires Gemini credentials (see ADK setup docs). A ``.env`` in this
 directory with ``GOOGLE_API_KEY`` or Vertex AI configuration is loaded
@@ -134,7 +134,7 @@ def process_arguments() -> argparse.Namespace:
             " then makes one more LLM call before terminating, instead of"
             " terminating at the EUC like the toolset-level path does."
         ),
-        epilog=("Example usage:\n\tpython main.py\n\tpython main.py --apply-fix\n"),
+        epilog=("Example usage:\n\tuv run main.py\n\tuv run main.py --apply-fix\n"),
         formatter_class=argparse.RawTextHelpFormatter,
     )
     parser.add_argument(

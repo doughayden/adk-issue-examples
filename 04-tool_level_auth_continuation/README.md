@@ -26,10 +26,10 @@ From this directory:
 
 ```bash
 # Reproduce the bug (default)
-uv run python main.py
+uv run main.py
 
 # Run with the proposed upstream fix applied
-uv run python main.py --apply-fix
+uv run main.py --apply-fix
 ```
 
 ## What `--apply-fix` does

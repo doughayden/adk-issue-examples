@@ -26,10 +26,10 @@ From this directory:
 
 ```bash
 # Reproduce the bug (default)
-uv run python main.py
+uv run main.py
 
 # Run with the proposed upstream fix applied
-uv run python main.py --apply-fix
+uv run main.py --apply-fix
 ```
 
 The `--apply-fix` flag monkey-patches `weather_toolset.get_auth_config` to return `None`, which disables ADK's framework-level preemptive auth check for this toolset. Tool-level auth still fires on demand via `ToolAuthHandler` when the LLM actually invokes a tool. The upstream fix would be to remove the preemptive check from `_resolve_toolset_auth` entirely (or to unify the framework-level and tool-level credential key formats).

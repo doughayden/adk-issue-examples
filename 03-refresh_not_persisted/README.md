@@ -26,10 +26,10 @@ From this directory:
 
 ```bash
 # Reproduce the bug (default)
-uv run python main.py
+uv run main.py
 
 # Run with the proposed upstream fix applied
-uv run python main.py --apply-fix
+uv run main.py --apply-fix
 ```
 
 The `--apply-fix` flag monkey-patches `ToolAuthHandler._get_existing_credential` to call `self._store_credential(refreshed)` after a successful refresh — the one-line change proposed in the issue. With the fix applied, both queries succeed. Without it, the second query triggers re-auth.

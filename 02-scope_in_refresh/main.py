@@ -17,8 +17,8 @@ Differences from the upstream sample:
 
 Run from this directory:
 
-    uv run python main.py                 # demonstrate the bug
-    uv run python main.py --apply-fix     # demonstrate the fix resolves it
+    uv run main.py                 # demonstrate the bug
+    uv run main.py --apply-fix     # demonstrate the fix resolves it
 
 Requires Gemini credentials (see ADK setup docs). A ``.env`` in this
 directory with ``GOOGLE_API_KEY`` or Vertex AI configuration is loaded
@@ -95,7 +95,7 @@ def process_arguments() -> argparse.Namespace:
             " ADK's automatic refresh fails silently and the user is prompted"
             " to re-authorize."
         ),
-        epilog=("Example usage:\n\tpython main.py\n\tpython main.py --apply-fix\n"),
+        epilog=("Example usage:\n\tuv run main.py\n\tuv run main.py --apply-fix\n"),
         formatter_class=argparse.RawTextHelpFormatter,
     )
     parser.add_argument(

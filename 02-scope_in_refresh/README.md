@@ -28,10 +28,10 @@ From this directory:
 
 ```bash
 # Reproduce the bug (default)
-uv run python main.py
+uv run main.py
 
 # Run with the proposed upstream fix applied
-uv run python main.py --apply-fix
+uv run main.py --apply-fix
 ```
 
 The `--apply-fix` flag patches the refresher module's `create_oauth2_session` to null out `session.scope` after construction so authlib doesn't include `scope` in the refresh request body. The upstream fix would be to simply not pass `scope` to the `OAuth2Session` constructor in `oauth2_credential_util.create_oauth2_session`.

@@ -15,8 +15,8 @@ Differences from the upstream sample:
 
 Run from this directory:
 
-    uv run python main.py                 # demonstrate the bug
-    uv run python main.py --apply-fix     # demonstrate the fix resolves it
+    uv run main.py                 # demonstrate the bug
+    uv run main.py --apply-fix     # demonstrate the fix resolves it
 
 Requires Gemini credentials (see ADK setup docs). A ``.env`` in this
 directory with ``GOOGLE_API_KEY`` or Vertex AI configuration is loaded
@@ -97,7 +97,7 @@ def process_arguments() -> argparse.Namespace:
             "Weather Assistant Agent — reproduces ADK's refresh-not-persisted"
             " bug by issuing two weather queries in the same session."
         ),
-        epilog=("Example usage:\n\tpython main.py\n\tpython main.py --apply-fix\n"),
+        epilog=("Example usage:\n\tuv run main.py\n\tuv run main.py --apply-fix\n"),
         formatter_class=argparse.RawTextHelpFormatter,
     )
     parser.add_argument(
