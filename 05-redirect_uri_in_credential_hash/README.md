@@ -1,6 +1,6 @@
 # Credential lookup misses across redirect_uri changes
 
-Demonstrates that `ToolContextCredentialStore.get_credential_key` hashes `redirect_uri` along with the rest of the OAuth2 credential. Two credentials that share the same OAuth identity (client_id, client_secret, scopes, access_token, refresh_token) but differ only in `redirect_uri` produce different hash keys, so a credential minted under one deployment URL is unfindable when the deployment moves to another.
+Demonstrates that `ToolContextCredentialStore.get_credential_key` hashes `redirect_uri` along with the rest of the OAuth2 credential. Two credentials that share the same OAuth identity (client_id, client_secret, scopes, access_token, refresh_token) but differ only in `redirect_uri` produce different hash keys, so a credential minted under one deployment URL cannot be retrieved when the deployment moves to another.
 
 `redirect_uri` is deployment configuration, not credential identity. Including it in the hash defeats the credential store's purpose across multi-environment workflows (local dev, staging, production) and during routine configuration changes like a relay URL rotation.
 
@@ -40,7 +40,7 @@ Wraps both `ToolContextCredentialStore.get_credential_key` and `ToolContextCrede
 
 ## Expected output
 
-**Without fix:** the two hash keys differ. The agent emits a `function_call get_weather` followed by an `adk_request_credential` event — the seeded credential was present in state but unfindable under the agent's runtime hash key. `auth_events > 0`. Exit code 0 indicates the bug reproduced.
+**Without fix:** the two hash keys differ. The agent emits a `function_call get_weather` followed by an `adk_request_credential` event — the seeded credential was present in state but not retrievable under the agent's runtime hash key. `auth_events > 0`. Exit code 0 indicates the bug reproduced.
 
 **With fix:** the two hash keys are identical. The agent emits `function_call get_weather`, then `function_response get_weather` carrying real weather data, and a final assistant text. No `adk_request_credential` event. `auth_events == 0` and `function_responses > 0`. Exit code 0 indicates the fix takes effect.
 

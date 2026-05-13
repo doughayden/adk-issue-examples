@@ -6,7 +6,7 @@ Two credentials that share the same OAuth identity (client_id,
 client_secret, scopes, tokens) but differ only in ``redirect_uri`` —
 for example, the local-relay URL vs. the deployed-relay URL — produce
 different hash keys, so a credential minted under one redirect_uri is
-unfindable when the deployment moves to the other.
+no longer retrievable when the deployment moves to the other.
 
 Differences from ``03-refresh_not_persisted/main.py``:
 
@@ -346,7 +346,9 @@ async def main() -> int:
     if stored_key == current_key:
         print("    ✅ Keys match — fix is taking effect at the hash level.")
     else:
-        print("    ❌ Keys differ — credentials minted under STORED are unfindable.")
+        print(
+            "    ❌ Keys differ — credentials minted under STORED are not retrievable."
+        )
 
     print(
         "\nSeeding a real (non-expired) credential into session state under"

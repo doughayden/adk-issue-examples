@@ -1,7 +1,7 @@
 [project]
 name = "05-redirect-uri-in-credential-hash"
 version = "0.1.0"
-description = "ADK bug reproduction: get_credential_key hashes redirect_uri, so the same credential is unfindable across deployment URLs"
+description = "ADK bug reproduction: get_credential_key hashes redirect_uri, so the same credential cannot be retrieved across deployment URLs"
 readme = "README.md"
 requires-python = ">=3.13,<3.14"
 dependencies = [
