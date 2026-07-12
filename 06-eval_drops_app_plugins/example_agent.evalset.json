@@ -1,0 +1,35 @@
+{
+  "eval_set_id": "example_agent_smoke",
+  "name": "Example agent smoke case",
+  "description": "A single trivial turn. This example demonstrates that the App's plugins are dropped during eval inference; the response content and metric scores are incidental.",
+  "eval_cases": [
+    {
+      "eval_id": "greeting",
+      "conversation": [
+        {
+          "invocation_id": "greeting_inv_1",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Say hello."
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "Hello!"
+              }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "example_agent",
+        "user_id": "eval_user"
+      }
+    }
+  ]
+}

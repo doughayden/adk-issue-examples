@@ -2,7 +2,7 @@
 
 Runnable reproductions for issues filed in [google/adk-python](https://github.com/google/adk-python).
 
-Each subdirectory is a self-contained example for a specific bug — structured around an `LlmAgent` + `InMemoryRunner` flow, with a local OAuth2 test server. Entry points include a `--apply-fix` CLI flag that monkey-patches the proposed upstream fix so the same script demonstrates both the bug and its resolution.
+Each subdirectory is a self-contained example for a specific bug. Most are structured around an `LlmAgent` + `InMemoryRunner` flow with a local OAuth2 test server; example 06 drives ADK's `AgentEvaluator` instead. Entry points include a `--apply-fix` CLI flag that monkey-patches the proposed upstream fix so the same script demonstrates both the bug and its resolution.
 
 ## Examples
 
@@ -13,6 +13,7 @@ Each subdirectory is a self-contained example for a specific bug — structured 
 | 03 | [`03-refresh_not_persisted/`](03-refresh_not_persisted/) | `ToolAuthHandler._get_existing_credential` refreshes OAuth2 credentials in memory but doesn't persist them | [#5329](https://github.com/google/adk-python/issues/5329) |
 | 04 | [`04-tool_level_auth_continuation/`](04-tool_level_auth_continuation/) | Tool-level auth continues invocation past the `adk_request_credential` event, unlike toolset-level auth which terminates cleanly | [#5637](https://github.com/google/adk-python/issues/5637) |
 | 05 | [`05-redirect_uri_in_credential_hash/`](05-redirect_uri_in_credential_hash/) | `ToolContextCredentialStore.get_credential_key` hashes `redirect_uri`, so the same credential cannot be retrieved across deployment URLs | [#5691](https://github.com/google/adk-python/issues/5691) |
+| 06 | [`06-eval_drops_app_plugins/`](06-eval_drops_app_plugins/) | Eval inference builds its `Runner` from the bare `root_agent` and drops the `App`'s plugins, so evals score a different agent than production | [#5503](https://github.com/google/adk-python/issues/5503) |
 
 ## Running an example
 

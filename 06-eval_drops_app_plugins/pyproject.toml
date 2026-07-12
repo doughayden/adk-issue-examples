@@ -1,0 +1,42 @@
+[project]
+name = "06-eval-drops-app-plugins"
+version = "0.1.0"
+description = "ADK bug reproduction: eval inference builds its Runner from the bare root_agent and drops the App's plugins (adk-python#5503)"
+readme = "README.md"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "google-adk[eval]==2.4.0",
+    "python-dotenv>=1.2.2,<2.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.10,<0.16.0",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 88
+fix = true
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "N",   # pep8-naming
+    "S",   # flake8-bandit
+    "SIM", # flake8-simplify
+    "PTH", # flake8-use-pathlib
+    "RET", # flake8-return
+]
