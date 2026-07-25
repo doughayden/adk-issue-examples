@@ -10,7 +10,7 @@ The consequence: an eval scores a different agent than `adk web` chat and the de
 - **`example_agent/__init__.py`** — exposes the `agent` submodule so `AgentEvaluator` resolves `example_agent.agent.root_agent` from the module name `example_agent`.
 - **`example_agent.evalset.json`** — one trivial turn. The response content and metric scores are incidental; the plugin drop is the point.
 - **`test_config.json`** — a lenient `response_match_score` criterion (auto-discovered from the eval set's directory).
-- **`main.py`** — runs `AgentEvaluator.evaluate` and inspects `PLUGIN_INVOCATIONS` to report whether the App's plugins were applied.
+- **`main.py`** — probes the installed ADK for App-aware eval inference, runs `AgentEvaluator.evaluate`, and inspects `PLUGIN_INVOCATIONS` to report whether the App's plugins were applied.
 
 ## Prerequisites
 
@@ -27,25 +27,30 @@ The consequence: an eval scores a different agent than `adk web` chat and the de
 From this directory:
 
 ```bash
-# Reproduce the bug (default)
+# Released ADK: the App's plugins are dropped
 uv run main.py
 
-# Run with the proposed upstream fix applied
-uv run main.py --apply-fix
+# Branch carrying the fix: the App's plugins apply
+uv run --isolated --no-project \
+    --with "google-adk[eval] @ git+https://github.com/doughayden/adk-python@fix/eval-app-aware-inference" \
+    --with python-dotenv \
+    main.py
 ```
 
-## What `--apply-fix` does
+Nothing is patched or stubbed in either run. The pinned dependency in `pyproject.toml` selects the released ADK; the second command swaps in the branch and runs the same script unchanged, so what it exercises is the real caller chain (`AgentEvaluator` → `LocalEvalService` → `EvaluationGenerator`).
 
-Replaces `EvaluationGenerator._generate_inferences_from_root_agent` with a copy of the same body whose only change is the `Runner` construction: it builds the Runner from `app.model_copy(update={"plugins": list(app.plugins) + internal_eval_plugins, "root_agent": root_agent})` instead of the bare agent. The eval Runner then carries the App's plugins (plus the two internal eval plugins) and the App's `context_cache_config` / `resumability_config`.
+`main.py` probes the installed ADK for an `app` parameter on the inference leaf and reports the result, then checks the observed plugin behavior against it. A build without the parameter is expected to drop the plugins; a build with it is expected to apply them. Either mismatch exits non-zero.
 
-This example resolves the `App` directly from the agent package to stay self-contained. Upstream, the `App` reaches this leaf by being threaded through the eval callers (`AgentEvaluator._get_eval_results_by_eval_id`, the `dev_server` eval handler, and the `adk eval` CLI), which is the shape the accompanying PR takes.
+## What the fix does
+
+The eval Runner is built from `app.model_copy(update={"plugins": list(app.plugins) + internal_eval_plugins, "root_agent": root_agent})` instead of the bare agent, so it carries the App's plugins (plus the two internal eval plugins) along with the App's `context_cache_config` and `resumability_config`. The `App` reaches that leaf by being threaded through the eval callers: `AgentEvaluator._get_eval_results_by_eval_id`, the `dev_server` eval handler, and the `adk eval` CLI.
 
 ## Expected output
 
-**Without fix:** `AgentEvaluator.evaluate` runs the bare `root_agent`, so the `SentinelPlugin` never runs. `PLUGIN_INVOCATIONS` is empty. Exit code 0 indicates the bug reproduced.
+**Released ADK:** `AgentEvaluator.evaluate` runs the bare `root_agent`, so the `SentinelPlugin` never runs. `PLUGIN_INVOCATIONS` is empty. Exit code 0 indicates the bug reproduced.
 
-**With fix:** the eval Runner is built from the `App`, so the `SentinelPlugin` runs during inference. `PLUGIN_INVOCATIONS` contains `['sentinel']`. Exit code 0 indicates the fix takes effect.
+**Branch with the fix:** the eval Runner is built from the `App`, so the `SentinelPlugin` runs during inference. `PLUGIN_INVOCATIONS` contains `['sentinel']`. Exit code 0 indicates the fix takes effect.
 
 ## Scope
 
-Only the non-live inference leaf (`_generate_inferences_from_root_agent`) is covered. The live path (`_generate_inferences_from_root_agent_live`, used when `use_live=True`) has the same bare-agent construction and would need the same treatment; it is out of scope for this reproduction.
+This reproduction exercises the non-live inference leaf (`_generate_inferences_from_root_agent`), which is what `AgentEvaluator.evaluate` reaches. The live leaf (`_generate_inferences_from_root_agent_live`, used when `use_live=True`) had the same bare-agent construction and the branch gives it the same treatment through a shared Runner-construction helper; exercising it needs a live-API session, so it is covered by unit tests upstream rather than here. `main.py` reports whether the installed build carries the App through the live leaf as well.
